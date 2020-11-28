@@ -2,15 +2,22 @@
 # last updated 4/18/2020
 
 # import important packages
+import re
 import os
 import discord
 import random
+import datetime
+import robin_stocks as rs
 from dotenv import load_dotenv
 
 # load in variables from .env file
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 GUILD = os.getenv('SERVER')
+
+# robinhood 
+robin_user = os.environ.get("robinhood_username")
+robin_pass = os.environ.get("robinhood_password")
 
 # declare client as our current Discord client running
 client = discord.Client()
@@ -37,9 +44,11 @@ async def on_ready():
 # return gimli quotes
 @client.event
 async def on_message(message):
+        # ignore if self is sender 
         if message.author == client.user:
                     return
 
+        # for gimli quotes
         random_quotes=[
                             'Speak, or I will put a dint in your hat that even a wizard will find hard to deal with!',
                             'I name you Elf-friend; and may the stars shine upon the end of your road!',
@@ -52,53 +61,24 @@ async def on_message(message):
                             'Let them come. There is one Dwarf yet in Moria who still draws breath.',
                       ] 
         
-                            
+        # get gimli quote
         if message.content == 'gimli!':
             response = random.choice(random_quotes)
             await message.channel.send(response)
 
-#        if message.content == 'weeb!':
-#            random_int = random.randint(1,10)
-#            if random_int == 1:
-#                response = 'I need someone gentle. Can you help?'
-#                await message.channel.send(response)
-#                await message.channel.send(file=discord.File('pics/test1.jpg'))
-#            if random_int == 2:
-#                response = 'I\'ve had such a long day...can I rub your shoulders?'
-#                await message.channel.send(response)
-#                await message.channel.send(file=discord.File('pics/test2.jpg'))
-#            if random_int == 3:
-#                response = 'Notice me senpai!'
-#                await message.channel.send(response)
-#                await message.channel.send(file=discord.File('pics/test3.jpg'))
-#            if random_int == 4:
-#                response = 'Ughhhh senpai!'
-#                await message.channel.send(response)
-#                await message.channel.send(file=discord.File('pics/test4.jpg'))
-#            if random_int == 5:
-#                response = 'What do you want for Christmas? What do you *really* want?'
-#                await message.channel.send(response)
-#                await message.channel.send(file=discord.File('pics/test5.jpg'))
-#            if random_int == 6:
-#                response = 'Oh you need a hand with THAT? Well alright...'
-#                await message.channel.send(response)
-#               await message.channel.send(file=discord.File('pics/test6.jpg'))
-#            if random_int == 7:
-#                response = 'I hope you don\'t mind that I brought a friend.'
-#                await message.channel.send(response)
-#                await message.channel.send(file=discord.File('pics/test7.jpg'))
-#            if random_int == 8:
-#                response = 'Men never crave what they already have.'
-#                await message.channel.send(response)
-#                await message.channel.send(file=discord.File('pics/test8.jpg'))
-#            if random_int == 9:
-#                response = 'What\'re you looking at, Curtis?'
-#                await message.channel.send(response)                
-#                await message.channel.send(file=discord.File('pics/test9.jpg'))
-#            if random_int == 10:
-#                response = 'Meow...........meow'
-#                await message.channel.send(response)
-#                await message.channel.send(file=discord.File('pics/test10.jpg'))
+        # get robinhood stock price
+        if re.search("hood!", message.content):
+            x = re.split('hood!', message.content)
+            stock = x[1]
+            rs.login(username=robin_user, 
+                     password=robin_pass, 
+                     expiresIn=86400, 
+                     by_sms=True)
+            stock_price=str(rs.stocks.get_latest_price((stock), priceType=None, includeExtendedHours=True))
+            stock_price_len = len(str(stock_price))
+            formatted_price = str(stock + ": " + "$" + stock_price[2:stock_price_len-6])
+            #print(formatted_price)
+            await message.channel.send("Current Price of" + stock + "\n->" + formatted_price)
 
 client.run(TOKEN)
 
