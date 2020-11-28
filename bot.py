@@ -57,48 +57,48 @@ async def on_message(message):
             response = random.choice(random_quotes)
             await message.channel.send(response)
 
-        if message.content == 'weeb!':
-            random_int = random.randint(1,10)
-            if random_int == 1:
-                response = 'I need someone gentle. Can you help?'
-                await message.channel.send(response)
-                await message.channel.send(file=discord.File('pics/test1.jpg'))
-            if random_int == 2:
-                response = 'I\'ve had such a long day...can I rub your shoulders?'
-                await message.channel.send(response)
-                await message.channel.send(file=discord.File('pics/test2.jpg'))
-            if random_int == 3:
-                response = 'Notice me senpai!'
-                await message.channel.send(response)
-                await message.channel.send(file=discord.File('pics/test3.jpg'))
-            if random_int == 4:
-                response = 'Ughhhh senpai!'
-                await message.channel.send(response)
-                await message.channel.send(file=discord.File('pics/test4.jpg'))
-            if random_int == 5:
-                response = 'What do you want for Christmas? What do you *really* want?'
-                await message.channel.send(response)
-                await message.channel.send(file=discord.File('pics/test5.jpg'))
-            if random_int == 6:
-                response = 'Oh you need a hand with THAT? Well alright...'
-                await message.channel.send(response)
-                await message.channel.send(file=discord.File('pics/test6.jpg'))
-            if random_int == 7:
-                response = 'I hope you don\'t mind that I brought a friend.'
-                await message.channel.send(response)
-                await message.channel.send(file=discord.File('pics/test7.jpg'))
-            if random_int == 8:
-                response = 'Men never crave what they already have.'
-                await message.channel.send(response)
-                await message.channel.send(file=discord.File('pics/test8.jpg'))
-            if random_int == 9:
-                response = 'What\'re you looking at, Curtis?'
-                await message.channel.send(response)                
-                await message.channel.send(file=discord.File('pics/test9.jpg'))
-            if random_int == 10:
-                response = 'Meow...........meow'
-                await message.channel.send(response)
-                await message.channel.send(file=discord.File('pics/test10.jpg'))
+#        if message.content == 'weeb!':
+#            random_int = random.randint(1,10)
+#            if random_int == 1:
+#                response = 'I need someone gentle. Can you help?'
+#                await message.channel.send(response)
+#                await message.channel.send(file=discord.File('pics/test1.jpg'))
+#            if random_int == 2:
+#                response = 'I\'ve had such a long day...can I rub your shoulders?'
+#                await message.channel.send(response)
+#                await message.channel.send(file=discord.File('pics/test2.jpg'))
+#            if random_int == 3:
+#                response = 'Notice me senpai!'
+#                await message.channel.send(response)
+#                await message.channel.send(file=discord.File('pics/test3.jpg'))
+#            if random_int == 4:
+#                response = 'Ughhhh senpai!'
+#                await message.channel.send(response)
+#                await message.channel.send(file=discord.File('pics/test4.jpg'))
+#            if random_int == 5:
+#                response = 'What do you want for Christmas? What do you *really* want?'
+#                await message.channel.send(response)
+#                await message.channel.send(file=discord.File('pics/test5.jpg'))
+#            if random_int == 6:
+#                response = 'Oh you need a hand with THAT? Well alright...'
+#                await message.channel.send(response)
+#               await message.channel.send(file=discord.File('pics/test6.jpg'))
+#            if random_int == 7:
+#                response = 'I hope you don\'t mind that I brought a friend.'
+#                await message.channel.send(response)
+#                await message.channel.send(file=discord.File('pics/test7.jpg'))
+#            if random_int == 8:
+#                response = 'Men never crave what they already have.'
+#                await message.channel.send(response)
+#                await message.channel.send(file=discord.File('pics/test8.jpg'))
+#            if random_int == 9:
+#                response = 'What\'re you looking at, Curtis?'
+#                await message.channel.send(response)                
+#                await message.channel.send(file=discord.File('pics/test9.jpg'))
+#            if random_int == 10:
+#                response = 'Meow...........meow'
+#                await message.channel.send(response)
+#                await message.channel.send(file=discord.File('pics/test10.jpg'))
 
 client.run(TOKEN)
 
