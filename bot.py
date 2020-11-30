@@ -2,6 +2,8 @@
 # last updated 4/18/2020
 
 # import important packages
+import requests
+from pyowm import OWM
 import re
 import os
 import discord
@@ -14,6 +16,11 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 GUILD = os.getenv('SERVER')
+
+# weather
+API_key = "3b35bed55ea3e8d31402bfa9fdd9aef7"
+base_url = "http://api.openweathermap.org/data/2.5/weather?"
+owm = OWM('3b35bed55ea3e8d31402bfa9fdd9aef7')
 
 # robinhood 
 robin_user = os.environ.get("robinhood_username")
@@ -65,6 +72,19 @@ async def on_message(message):
         if message.content == 'gimli!':
             response = random.choice(random_quotes)
             await message.channel.send(response)
+
+        # weather
+        if re.search("weather!", message.content):
+            x = re.split('weather!', message.content)
+            city_name = x[1]
+            test_city = owm.weather_at_place(city_name)
+            test_weather = test_city.get_weather()
+            test_temp = test_weather.get_temperature('fahrenheit')['temp']
+            result = "\nCurrent Temperature in" + city_name + ": " + str(test_temp) + "*F"
+            # print("\nCurrent Temperature in " + city_name + ": " + str(test_temp) + "*F")
+            # Final_url = base_url + "appid=" + API_key + "&q=" + city_name
+            # weather_data = requests.get(Final_url).json()
+            await message.channel.send(result)
 
         # get robinhood stock price
         if re.search("hood!", message.content):
