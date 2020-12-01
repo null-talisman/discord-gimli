@@ -1,2 +1,2 @@
 # discord_prod_bot
-toxic_
+Gimli Bot for "toxic_" Discord Server
