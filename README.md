@@ -1,2 +1,2 @@
-# discord_prod_bot
+# Gimli - Discord Bot
 Gimli Bot for "toxic_" Discord Server
