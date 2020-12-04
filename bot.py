@@ -73,6 +73,27 @@ async def on_message(message):
             response = random.choice(random_quotes)
             await message.channel.send(response)
 
+        # meteor for tanner
+        if message.content == 'meteors!':
+            with open('meteor_pics/taurids.jpg') as f:
+                rand_int = random.randint(1,5)
+                if rand_int == 1: 
+                    await message.channel.send("Active between October 20 and December 10, 2020, the Northern Taurids peak late the night of Wednesday, November 11, 2020, and into the predawn hours of Thursday, November 12, 2020, when the moon will only be 15 percent full. Expect only about five meteors per hour during this shower, so don’t feel much FOMO if you don’t see this one.")
+                    await message.channel.send(file=discord.File('meteor_pics/taurids.jpg'))
+                elif rand_int == 2:
+                    await message.channel.send("Active between December 27, 2020, and January 10, 2021, the Quadrantids peak late at night on Saturday, January 2 and into early Sunday morning in 2021. The moon will be 84 percent full, so if you go out to watch this meteor shower you might have to struggle with too much moonlight in addition to potentially poor weather. Under the best conditions, you’ll see an average of 25 meteors per hour during the Quadrantids, making it one of the stronger showers of the year.")
+                    await message.channel.send(file=discord.File('meteor_pics/quadrantid.jpg'))
+                elif rand_int == 3:
+                    await message.channel.send("In exceptional years, the Orionids can produce up to 75 meteors per hour. But that hasn’t happened since 2009. In a normal year, as 2020 is predicted to be, expect between 10 to 20 meteors per hour. For peak activity, you’ll want to head out in the predawn hours on October 21. The moon is expected to be just 23 percent full that night, but the shower is active between October 2 and November 7, 2020. ")        
+                    await message.channel.send(file=discord.File('meteor_pics/orionid.jpg'))
+                elif rand_int == 4:
+                    await message.channel.send("While the Leonids can produce outbursts of activity in certain years, 2020 is expected to only get about 10 to 15 meteors per hour during the shower’s peak on the night of Monday, November 16, into the predawn hours of November 17, when the moon will only be 5 percent full. Lasting from November 6 to 30, 2020, the Leonids are known for particularly bright meteors.")
+                    await message.channel.send(file=discord.File('meteor_pics/leonids.jpg'))
+                elif rand_int == 5:
+                    await message.channel.send("The Geminids are the strongest meteor shower of the year. And in 2020, the peak falls on the night of Sunday, December 13, when the moon will only be at 1 percent, providing ideal dark sky conditions. In the Northern Hemisphere, you’ll be able to see meteors from about 11 p.m. onward. If you’re in the Southern Hemisphere—perhaps to see the total solar eclipse in Chile and Argentina—you’ll have to stay up into the early morning hours of December 14 to see the show. But it’s worth it—up to 75 meteors per hour are expected during the Geminids each year. The entire shower lasts from December 4 to 17, 2020.")
+                    await message.channel.send(file=discord.File('meteor_pics/geminids.jpg'))
+
+
         # weather
         if re.search("weather!", message.content):
             x = re.split('weather!', message.content)
