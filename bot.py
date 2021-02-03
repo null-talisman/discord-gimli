@@ -67,14 +67,34 @@ async def on_message(message):
                             'If anyone was to ask for my opinion, which I note they’re not, I’d say we were taking the long way around.',
                             'Let them come. There is one Dwarf yet in Moria who still draws breath.',
                       ] 
-        
+
+        # for help info
+        help_info="""!gimli - Gimli, Son of Gloin, graces you with his presence.\n!meteors - Knowledge is power.\n!weather <city name> - Should get the weather report for that city.\n!hood <stock> - Gets current price from Robinhood.\n!test - fugaz command
+        """
+        test_help_info=[
+            "!gimli - Gimli, Son of Gloin, graces you with his presence.",
+            "!meteors - Knowledge is power.",
+            "!weather <city name> - Should get the weather report for that city.",
+            "!hood <stock> - Gets current price from Robinhood.",
+            "!top <#> - Gets top X daily movers from Robinhood. Default is 20."
+            "!test - fugaz command"
+        ]
+        if message.content == '!help':
+            #response = random.choice(random_quotes)
+            await message.channel.send(help_info)
+        #####################################TESTING##############################################
+        if message.content == '!test':
+            for item in test_help_info:
+                await message.channel.send(item)
+        #########################################################################################
+
         # get gimli quote
-        if message.content == 'gimli!':
+        if message.content == '!gimli':
             response = random.choice(random_quotes)
             await message.channel.send(response)
-
+        
         # meteor for tanner
-        if message.content == 'meteors!':
+        if message.content == '!meteors':
             with open('meteor_pics/taurids.jpg') as f:
                 rand_int = random.randint(1,5)
                 if rand_int == 1: 
@@ -95,8 +115,8 @@ async def on_message(message):
 
 
         # weather
-        if re.search("weather!", message.content):
-            x = re.split('weather!', message.content)
+        if re.search("!weather", message.content):
+            x = re.split('!weather', message.content)
             city_name = x[1]
             test_city = owm.weather_at_place(city_name)
             test_weather = test_city.get_weather()
@@ -108,18 +128,70 @@ async def on_message(message):
             await message.channel.send(result)
 
         # get robinhood stock price
-        if re.search("hood!", message.content):
-            x = re.split('hood!', message.content)
+        if re.search("!hood", message.content):
+            x = re.split('!hood', message.content)
             stock = x[1]
             rs.login(username=robin_user, 
                      password=robin_pass, 
                      expiresIn=86400, 
                      by_sms=True)
             stock_price=str(rs.stocks.get_latest_price((stock), priceType=None, includeExtendedHours=True))
+            #
+            test_shit=str(rs.stocks.get_stock_historicals((stock), interval='hour', bounds='regular'))
+            test2=str(rs.get_top_movers)
+            #
             stock_price_len = len(str(stock_price))
             formatted_price = str(stock + ": " + "$" + stock_price[2:stock_price_len-6])
             #print(formatted_price)
             await message.channel.send("Current Price of" + stock + "\n->" + formatted_price)
+            for item in test_shit.splitlines():
+                print(item)
+            #print(test_shit)
+            #await message.channel.send("****\n" + test_shit)
+
+        if re.search("!top", message.content):
+            x = re.split('!top ', message.content)
+            cond = False
+            if len(x) > 1:
+                top = x[1]
+                cond = True
+            
+            rs.login(username=robin_user, 
+                    password=robin_pass, 
+                    expiresIn=604800, 
+                    by_sms=False)
+
+            top_movers = rs.get_top_movers()
+            i=1
+            info = []
+            for fuck in top_movers:
+                symbl = fuck.get("symbol")
+                price = fuck.get("last_trade_price")
+                new_price = str(price[:(len(price)-4)])
+                #print(str(i) + ". " + symbl + " " + new_price)
+                info.append(str(i) + ". " + symbl + " " + new_price)
+                i+=1
+
+            if cond == True:
+                res = "Top " + top + " Movers\n"
+                jank = 0
+                while jank < int(top):
+                    res = res + info[jank]
+                    res = res + "\n"
+                    #print(info[jank])
+                    jank+=1
+                #print(res)
+                #return
+                await message.channel.send(res)
+            else:
+                res = "Top 20 Movers:\n"
+                for line in info:
+                    res = res + line
+                    res = res + "\n"
+                    #print(line)
+                await message.channel.send(res)
+            #print(info)
+            #await message.channel.send(top_movers)
 
 client.run(TOKEN)
 
