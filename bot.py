@@ -1,5 +1,6 @@
 # python bot for Discord server 'toxic_' 
 # last updated 4/18/2020
+# - added top 2/2/21
 
 # import important packages
 import requests
@@ -69,7 +70,7 @@ async def on_message(message):
                       ] 
 
         # for help info
-        help_info="""!gimli - Gimli, Son of Gloin, graces you with his presence.\n!meteors - Knowledge is power.\n!weather <city name> - Should get the weather report for that city.\n!hood <stock> - Gets current price from Robinhood.\n!test - fugaz command
+        help_info="""!gimli - Gimli, Son of Gloin, graces you with his presence.\n!meteors - Knowledge is power.\n!weather <city name> - Should get the weather report for that city.\n!hood <stock> - Gets current price from Robinhood.\n!test - fugaz command\n!top <#> - Gets top X daily movers from Robinhood. Default is 20.
         """
         test_help_info=[
             "!gimli - Gimli, Son of Gloin, graces you with his presence.",
@@ -83,9 +84,9 @@ async def on_message(message):
             #response = random.choice(random_quotes)
             await message.channel.send(help_info)
         #####################################TESTING##############################################
-        if message.content == '!test':
-            for item in test_help_info:
-                await message.channel.send(item)
+        #if message.content == '!test':
+        #    for item in test_help_info:
+        #        await message.channel.send(item)
         #########################################################################################
 
         # get gimli quote
@@ -134,7 +135,7 @@ async def on_message(message):
             rs.login(username=robin_user, 
                      password=robin_pass, 
                      expiresIn=86400, 
-                     by_sms=True)
+                     by_sms=False)
             stock_price=str(rs.stocks.get_latest_price((stock), priceType=None, includeExtendedHours=True))
             #
             test_shit=str(rs.stocks.get_stock_historicals((stock), interval='hour', bounds='regular'))
@@ -169,7 +170,7 @@ async def on_message(message):
                 price = fuck.get("last_trade_price")
                 new_price = str(price[:(len(price)-4)])
                 #print(str(i) + ". " + symbl + " " + new_price)
-                info.append(str(i) + ". " + symbl + " " + new_price)
+                info.append(str(i) + ". " + symbl + " $" + new_price)
                 i+=1
 
             if cond == True:
@@ -192,6 +193,30 @@ async def on_message(message):
                 await message.channel.send(res)
             #print(info)
             #await message.channel.send(top_movers)
+
+        if re.search("!about", message.content):
+            rs.login(username=robin_user, 
+                password=robin_pass, 
+                expiresIn=604800, 
+                by_sms=False)
+            str_len = len(re.split("!about", message.content))
+            print(str_len)
+            if str_len == 1:
+                await message.channel.send("Invalid. Dummy.")
+            elif str_len == 2:
+                info = []
+                spl = re.split("!about", message.content)
+                x = spl[1]
+                x_high = str(rs.get_fundamentals(x, 'high'))
+                x_low = str(rs.get_fundamentals(x, 'low'))
+                x_avg_vol = str(rs.get_fundamentals(x, 'average_volume_2_weeks'))
+                x_desc = rs.get_fundamentals(x, 'description')
+                x_sect = rs.get_fundamentals(x, 'sector')
+                x_symb = rs.get_fundamentals(x, 'symbol')
+                print("High: " + x_high + "\nLow: " + x_low + "\nAverage Volume (2 Wks): " + x_avg_vol)
+                #print("Description: " + x_desc + "\nSector: " + x_sect + "\nSymbol: " + x_symb)
+                await message.channel.send("Symbol: "+str(x_symb)+"\nSector: "+str(x_sect)+"\nHigh: $"+str(x_high[2:len(x_high)-6])+"\nLow: $"+str(x_low[2:len(x_low)-6])+"\nAvg Vol: "+str(x_avg_vol[2:len(x_avg_vol)-6]))
+
 
 client.run(TOKEN)
 
